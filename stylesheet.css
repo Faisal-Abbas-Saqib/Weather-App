@@ -3,14 +3,14 @@
 body
 
   {
-     background-image: url("images/img1.png");
+     background-image: url("img1.png");
      background-size: cover;
   }
 
 
 .box
   {
-    background-image: url("images/sunny.png");
+    background-image: url("sunny.png");
 
     background-size: cover;        
     width:300px;
@@ -94,9 +94,9 @@ background-color:aquamarine;
       
       .box table{
         th{text-align: left;}
-        background-image: url("images/sunny.png");
+        background-image: url("sunny.png");
         td{
-          background-image: url("images/sunny.png");
+          background-image: url("sunny.png");
         }
         img{size: 2px;}
       }
