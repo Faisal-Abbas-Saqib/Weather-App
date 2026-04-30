@@ -3,40 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stockholm — 5 Day Forecast</title>
     <link rel="stylesheet" href="styleSheet.css">
 </head>
-<body>
-    <a href="index.html">Stockholm Today</a>
-    
-           
-    
+<body class="page-forecast">
+<a href="index.html">&larr; Stockholm Today</a>
+
+<div class="forecast-wrapper">
+    <h2 class="forecast-heading">5-Day Forecast</h2>
     <table>
-         <tr>
-            <th>Next 5 Days</th>
-            <td id="nrOfdays"></td>            
-         </tr>
-         <tr>
-            <th>Date</th>
+        <tr>
+            <th><span class="th-label">Day</span></th>
+            <td id="nrOfdays"></td>
+        </tr>
+        <tr>
+            <th><span class="th-label">Date</span></th>
             <td id="date"></td>
-         </tr>
-         <tr>
-            <th>Min_Temp</th>
+        </tr>
+        <tr>
+            <th><span class="th-label">Min Temp</span></th>
             <td class="min_temp"></td>
-         </tr>
-         <tr>
-            <th>Weather</th>
+        </tr>
+        <tr>
+            <th><span class="th-label">Weather</span></th>
             <td class="icon"></td>
-         </tr>
-         <tr>
-            <th>Max_Temp</th>
+        </tr>
+        <tr>
+            <th><span class="th-label">Max Temp</span></th>
             <td class="max_temp"></td>
-         </tr>            
-    
-        </table>
-    <script src="WeatherApp.js"> 
-    
-    </script>
-    
+        </tr>
+    </table>
+</div>
+
+<script src="WeatherApp.js"></script>
 </body>
 </html>
