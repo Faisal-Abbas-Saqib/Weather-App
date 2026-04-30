@@ -1,113 +1,322 @@
+/* ============================================================
+   BASE / RESET
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
+body {
+  background-image: url("img1.png");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  margin: 0;
+  padding: 12px;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-body
+/* ============================================================
+   NAVIGATION LINK
+   ============================================================ */
+a {
+  font-size: 40px;
+  color: black;
+  display: block;
+  /* Responsive font */
+  font-size: clamp(20px, 5vw, 40px);
+  word-break: break-word;
+}
 
-  {
-     background-image: url("img1.png");
-     background-size: cover;
+/* ============================================================
+   .box  — today's weather card
+   ============================================================ */
+.box {
+  background-image: url("sunny.png");
+  background-size: cover;
+  background-position: center;
+  width: 300px;
+  height: 450px;
+  border: 5px;
+  border-radius: 30px;
+  padding: 20px;
+  margin: auto;
+  margin-top: 50px;
+  /* Allow card to breathe on very small screens */
+  max-width: 100%;
+}
+
+/* ============================================================
+   TYPOGRAPHY  (inside .box / global headings)
+   ============================================================ */
+h1 {
+  font-size: 35px;
+  margin-left: 70px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-left: 100px;
+}
+
+h3 {
+  margin: auto 120px;
+  font-size: 30px;
+}
+
+/* ============================================================
+   TABLE  (shared by both pages)
+   ============================================================ */
+table {
+  width: 80%;
+  margin: auto;
+  margin-top: 10%;
+  border: 1px solid white;
+  /* Prevent table from overflowing its container */
+  table-layout: fixed;
+  word-break: break-word;
+}
+
+tr {
+  height: 50px;
+}
+
+td {
+  background-color: cyan;
+  text-align: center;
+  word-spacing: 50px;
+  letter-spacing: 2px;
+}
+
+td:hover {
+  background-color: #D6EEEE;
+}
+
+#nrOfdays {
+  background-color: aquamarine;
+}
+
+tr .min_temp {
+  word-spacing: 80px;
+}
+
+tr .max_temp {
+  word-spacing: 80px;
+}
+
+tr .icon {
+  word-spacing: 100px;
+}
+
+#date {
+  word-spacing: 30px;
+}
+
+/* ============================================================
+   .box TABLE overrides
+   ============================================================ */
+.box table {
+  background-image: url("sunny.png");
+}
+
+.box table th {
+  text-align: left;
+}
+
+.box table td {
+  background-image: url("sunny.png");
+}
+
+.box table img {
+  width: 30%;
+  height: 30%;
+  max-width: 30px;
+}
+
+/* ============================================================
+   MOBILE  (320px – 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+  body {
+    padding: 8px;
   }
 
+  /* Card: let it fill most of the screen width */
+  .box {
+    width: min(300px, 92vw);
+    height: auto;
+    min-height: 380px;
+    margin-top: 24px;
+    padding: 16px;
+  }
 
-.box
-  {
-    background-image: url("sunny.png");
+  h1 {
+    font-size: clamp(20px, 6vw, 35px);
+    margin-left: clamp(20px, 10vw, 70px);
+  }
 
-    background-size: cover;        
-    width:300px;
-    height: 450px;
-    border: 5px;
-    border-radius: 30px;
+  h2 {
+    font-size: clamp(16px, 4vw, 20px);
+    margin-left: clamp(30px, 15vw, 100px);
+  }
+
+  h3 {
+    font-size: clamp(20px, 6vw, 30px);
+    margin: auto clamp(40px, 15vw, 120px);
+  }
+
+  /* Tables fill the viewport on mobile */
+  table {
+    width: 96%;
+    margin-top: 16px;
+    /* Allow horizontal scroll as a last resort */
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Reset display block for inner elements */
+  table thead,
+  table tbody,
+  table tr {
+    display: table-row-group;
+  }
+
+  table tr {
+    display: table-row;
+    height: auto;
+    min-height: 40px;
+  }
+
+  table th,
+  table td {
+    display: table-cell;
+    padding: 8px 6px;
+    font-size: clamp(11px, 3vw, 14px);
+  }
+
+  /* Reduce word-spacing so text doesn't overflow on small screens */
+  td {
+    word-spacing: normal;
+    letter-spacing: 0.5px;
+  }
+
+  tr .min_temp,
+  tr .max_temp {
+    word-spacing: normal;
+  }
+
+  tr .icon {
+    word-spacing: 20px;
+    font-size: clamp(16px, 5vw, 22px);
+  }
+
+  #date {
+    word-spacing: 8px;
+    font-size: clamp(10px, 2.5vw, 13px);
+  }
+
+  #nrOfdays {
+    word-spacing: 8px;
+  }
+}
+
+/* ============================================================
+   TABLET  (768px – 1023px)
+   ============================================================ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  body {
+    padding: 16px;
+  }
+
+  .box {
+    width: min(360px, 60vw);
+    height: auto;
+    min-height: 430px;
+    margin-top: 40px;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 35px);
+  }
+
+  table {
+    width: 85%;
+    margin-top: 6%;
+  }
+
+  td {
+    word-spacing: 20px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  tr .min_temp,
+  tr .max_temp {
+    word-spacing: 30px;
+  }
+
+  tr .icon {
+    word-spacing: 40px;
+  }
+
+  #date {
+    word-spacing: 16px;
+  }
+
+  a {
+    font-size: clamp(24px, 4vw, 36px);
+  }
+}
+
+/* ============================================================
+   DESKTOP  (1024px – 1439px)
+   ============================================================ */
+@media (min-width: 1024px) {
+  body {
     padding: 20px;
-    margin: auto;
+  }
+
+  .box {
+    width: 300px;
+    height: 450px;
     margin-top: 50px;
   }
 
-    h1
-    {
-        font-size:35px;
-        margin-left: 70px;
-    }
-    h2
-    {
-      font-size: 20px;
-      margin-left: 100px;
-    }
-    h3
-    {
-      margin: auto 120px;
-      font-size: 30px;
+  table {
+    width: 80%;
+    margin-top: 10%;
+  }
 
-    }
-    table
-      {
-        width: 80%;
-        margin: auto;
-        margin-top: 10%;
-        border: 1px solid white;
+  a {
+    font-size: 40px;
+  }
+}
 
-        
-      }
-      tr{
-        height: 50px;
-      }
-   
-    
-      td {
-         background-color:cyan;
-         text-align: center;
-          word-spacing: 50px;
-          letter-spacing: 2px;
+/* ============================================================
+   LARGE SCREENS  (1440px+)
+   ============================================================ */
+@media (min-width: 1440px) {
+  .box {
+    width: 340px;
+    height: 480px;
+    margin-top: 60px;
+  }
 
-      }
-      td:hover {background-color: #D6EEEE;}
+  table {
+    width: 70%;
+  }
 
-    #nrOfdays
-      {
-background-color:aquamarine;  
-        
-      } 
-      tr .min_temp
-      {
-        word-spacing: 80px;
-        
-      }
-      tr .max_temp
-      {
+  h1 {
+    font-size: 38px;
+  }
 
-        word-spacing: 80px;
-      }
-      tr .icon
-      {
+  h3 {
+    font-size: 34px;
+  }
 
-        word-spacing: 100px;
-      }
-      #date
-      { 
-        word-spacing: 30px;
-
-      }
-
-      a{
-        font-size: 40px;
-        color:black;
-      }
-      
-      .box table{
-        th{text-align: left;}
-        background-image: url("sunny.png");
-        td{
-          background-image: url("sunny.png");
-        }
-        img{size: 2px;}
-      }
-
-
-
-     
-
-      
-    
-    
-
-
-
+  td {
+    font-size: 16px;
+    padding: 12px;
+  }
+}
