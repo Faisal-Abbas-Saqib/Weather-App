@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stockholm — 5 Day Forecast</title>
-    <link rel="stylesheet" href="styleSheet.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stockholm — 5-Day Forecast</title>
+  <link rel="stylesheet" href="styleSheet.css">
 </head>
-<body class="page-forecast">
-<a href="index.html">&larr; Stockholm Today</a>
+<body>
 
-<div class="forecast-wrapper">
-    <h2 class="forecast-heading">5-Day Forecast</h2>
+  <a href="index.html">Today's Weather</a>
+
+  <div class="forecast-wrapper">
+    <p class="forecast-heading">5-Day Forecast · Stockholm</p>
+
     <table>
-        <tr>
-            <th><span class="th-label">Day</span></th>
-            <td id="nrOfdays"></td>
-        </tr>
-        <tr>
-            <th><span class="th-label">Date</span></th>
-            <td id="date"></td>
-        </tr>
-        <tr>
-            <th><span class="th-label">Min Temp</span></th>
-            <td class="min_temp"></td>
-        </tr>
-        <tr>
-            <th><span class="th-label">Weather</span></th>
-            <td class="icon"></td>
-        </tr>
-        <tr>
-            <th><span class="th-label">Max Temp</span></th>
-            <td class="max_temp"></td>
-        </tr>
+      <tr>
+        <th>📅 Day</th>
+        <td id="nrOfdays">--</td>
+      </tr>
+      <tr>
+        <th>🗓 Date</th>
+        <td id="date">--</td>
+      </tr>
+      <tr>
+        <th>🌡 Min Temp</th>
+        <td class="min_temp">--</td>
+      </tr>
+      <tr>
+        <th>🌤 Weather</th>
+        <td class="icon">--</td>
+      </tr>
+      <tr>
+        <th>🌡 Max Temp</th>
+        <td class="max_temp">--</td>
+      </tr>
     </table>
-</div>
+  </div>
 
-<script src="WeatherApp.js"></script>
+  <script src="WeatherApp.js"></script>
 </body>
 </html>
