@@ -1,322 +1,408 @@
 /* ============================================================
-   BASE / RESET
+   GOOGLE FONTS
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES
+   ============================================================ */
+:root {
+  --sky-top:       #0a2a6e;
+  --sky-mid:       #1a5fb4;
+  --sky-horizon:   #5ba3e8;
+  --sky-glow:      #a8d4f5;
+  --card-bg:       rgba(255, 255, 255, 0.13);
+  --card-border:   rgba(255, 255, 255, 0.30);
+  --card-shadow:   0 8px 40px rgba(10, 42, 110, 0.35);
+  --td-bg:         rgba(255, 255, 255, 0.18);
+  --td-hover:      rgba(255, 255, 255, 0.32);
+  --th-color:      rgba(255, 255, 255, 0.75);
+  --text-primary:  #ffffff;
+  --text-accent:   #cce8ff;
+  --link-color:    #a8d4f5;
+  --font-display:  'Outfit', sans-serif;
+  --font-mono:     'Space Mono', monospace;
+  --radius-card:   28px;
+  --radius-cell:   10px;
+}
+
+/* ============================================================
+   RESET / BASE
    ============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
-}
-
-body {
-  background-image: url("img1.png");
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
   margin: 0;
-  padding: 12px;
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
 }
 
 /* ============================================================
-   NAVIGATION LINK
+   BODY — animated sky gradient
+   ============================================================ */
+body {
+  min-height: 100vh;
+  background: linear-gradient(170deg,
+    var(--sky-top) 0%,
+    var(--sky-mid) 45%,
+    var(--sky-horizon) 75%,
+    var(--sky-glow) 100%
+  );
+  background-attachment: fixed;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  padding: 24px 16px 48px;
+  overflow-x: hidden;
+}
+
+/* Stars overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 55% 5%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 12%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 6%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 20% 22%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 18%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 20%, rgba(255,255,255,0.4) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================
+   NAV LINK
    ============================================================ */
 a {
-  font-size: 40px;
-  color: black;
-  display: block;
-  /* Responsive font */
-  font-size: clamp(20px, 5vw, 40px);
-  word-break: break-word;
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: clamp(15px, 3.5vw, 20px);
+  font-weight: 600;
+  color: var(--link-color);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  padding: 10px 20px;
+  border: 1px solid rgba(168, 212, 245, 0.4);
+  border-radius: 50px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s, color 0.2s;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 28px;
+}
+
+a:hover {
+  background: rgba(255,255,255,0.18);
+  color: #ffffff;
 }
 
 /* ============================================================
-   .box  — today's weather card
+   .box — today's weather card (glass)
    ============================================================ */
 .box {
-  background-image: url("sunny.png");
-  background-size: cover;
-  background-position: center;
-  width: 300px;
-  height: 450px;
-  border: 5px;
-  border-radius: 30px;
-  padding: 20px;
-  margin: auto;
-  margin-top: 50px;
-  /* Allow card to breathe on very small screens */
-  max-width: 100%;
+  position: relative;
+  z-index: 1;
+  width: min(340px, 92vw);
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid var(--card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--card-shadow);
+  padding: clamp(20px, 5vw, 32px);
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Shimmer ring behind card */
+.box::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: calc(var(--radius-card) + 2px);
+  background: linear-gradient(135deg,
+    rgba(255,255,255,0.25) 0%,
+    transparent 50%,
+    rgba(168,212,245,0.15) 100%
+  );
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* ============================================================
-   TYPOGRAPHY  (inside .box / global headings)
+   WEATHER SECTION inside .box
    ============================================================ */
-h1 {
-  font-size: 35px;
-  margin-left: 70px;
+.weather {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-h2 {
-  font-size: 20px;
-  margin-left: 100px;
+h1.cityName {
+  font-size: clamp(22px, 6vw, 34px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-left: 0;
+  margin-bottom: 4px;
 }
 
-h3 {
-  margin: auto 120px;
-  font-size: 30px;
+h2.iconimage {
+  font-size: clamp(48px, 12vw, 72px);
+  margin-left: 0;
+  line-height: 1.1;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+h3.temp {
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 10vw, 56px);
+  font-weight: 700;
+  margin: 8px auto;
+  color: #ffffff;
+  text-shadow: 0 2px 16px rgba(90,163,232,0.6);
+}
+
+h4.time {
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 3vw, 15px);
+  font-weight: 400;
+  color: var(--text-accent);
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+  line-height: 1.5;
 }
 
 /* ============================================================
-   TABLE  (shared by both pages)
+   TABLE — shared
    ============================================================ */
 table {
-  width: 80%;
-  margin: auto;
-  margin-top: 10%;
-  border: 1px solid white;
-  /* Prevent table from overflowing its container */
-  table-layout: fixed;
-  word-break: break-word;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+  margin-top: 8px;
 }
 
 tr {
-  height: 50px;
+  height: auto;
+}
+
+th {
+  font-family: var(--font-display);
+  font-size: clamp(11px, 2.5vw, 13px);
+  font-weight: 600;
+  color: var(--th-color);
+  text-align: left;
+  padding: 10px 12px;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: 45%;
+}
+
+.th-label {
+  vertical-align: middle;
 }
 
 td {
-  background-color: cyan;
+  background-color: var(--td-bg);
+  border-radius: var(--radius-cell);
   text-align: center;
-  word-spacing: 50px;
-  letter-spacing: 2px;
+  padding: 10px 8px;
+  font-family: var(--font-mono);
+  font-size: clamp(11px, 2.5vw, 13px);
+  color: var(--text-primary);
+  word-spacing: normal;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: background 0.18s;
 }
 
 td:hover {
-  background-color: #D6EEEE;
-}
-
-#nrOfdays {
-  background-color: aquamarine;
-}
-
-tr .min_temp {
-  word-spacing: 80px;
-}
-
-tr .max_temp {
-  word-spacing: 80px;
-}
-
-tr .icon {
-  word-spacing: 100px;
-}
-
-#date {
-  word-spacing: 30px;
+  background-color: var(--td-hover);
 }
 
 /* ============================================================
-   .box TABLE overrides
+   .box TABLE specifics
    ============================================================ */
 .box table {
-  background-image: url("sunny.png");
-}
-
-.box table th {
-  text-align: left;
-}
-
-.box table td {
-  background-image: url("sunny.png");
+  margin-top: 0;
 }
 
 .box table img {
-  width: 30%;
-  height: 30%;
-  max-width: 30px;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  opacity: 0.85;
 }
 
 /* ============================================================
-   MOBILE  (320px – 767px)
+   FORECAST PAGE (.page-forecast)
    ============================================================ */
-@media (max-width: 767px) {
+.page-forecast {
+  --sky-top:     #0d3b2e;
+  --sky-mid:     #0e6655;
+  --sky-horizon: #1abc9c;
+  --sky-glow:    #a2f0dc;
+  --link-color:  #a2f0dc;
+  --td-bg:       rgba(10, 80, 60, 0.30);
+  --td-hover:    rgba(10, 80, 60, 0.55);
+  --th-color:    rgba(255, 255, 255, 0.80);
+}
+
+.page-forecast body {
+  background: linear-gradient(170deg,
+    #0d3b2e 0%,
+    #0e6655 45%,
+    #1abc9c 75%,
+    #a2f0dc 100%
+  );
+}
+
+.forecast-wrapper {
+  position: relative;
+  z-index: 1;
+  width: min(720px, 94vw);
+  background: rgba(255,255,255,0.10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(255,255,255,0.22);
+  border-radius: var(--radius-card);
+  box-shadow: 0 8px 40px rgba(0, 60, 40, 0.35);
+  padding: clamp(20px, 5vw, 36px);
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.forecast-heading {
+  font-size: clamp(18px, 4vw, 26px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Forecast-specific td word-spacing overrides */
+#nrOfdays {
+  background-color: rgba(26, 188, 156, 0.25);
+  word-spacing: 12px;
+}
+
+#date {
+  word-spacing: 8px;
+  font-size: clamp(10px, 2vw, 12px);
+}
+
+tr .min_temp {
+  word-spacing: 16px;
+}
+
+tr .max_temp {
+  word-spacing: 16px;
+}
+
+tr .icon {
+  word-spacing: 24px;
+  font-size: clamp(16px, 4vw, 22px);
+}
+
+/* ============================================================
+   MOBILE  (≤ 480px)
+   ============================================================ */
+@media (max-width: 480px) {
   body {
-    padding: 8px;
+    padding: 16px 10px 40px;
   }
 
-  /* Card: let it fill most of the screen width */
   .box {
-    width: min(300px, 92vw);
-    height: auto;
-    min-height: 380px;
-    margin-top: 24px;
-    padding: 16px;
+    padding: 20px 16px;
   }
 
-  h1 {
-    font-size: clamp(20px, 6vw, 35px);
-    margin-left: clamp(20px, 10vw, 70px);
+  th {
+    width: 40%;
+    padding: 8px 8px;
+    font-size: 10px;
   }
 
-  h2 {
-    font-size: clamp(16px, 4vw, 20px);
-    margin-left: clamp(30px, 15vw, 100px);
-  }
-
-  h3 {
-    font-size: clamp(20px, 6vw, 30px);
-    margin: auto clamp(40px, 15vw, 120px);
-  }
-
-  /* Tables fill the viewport on mobile */
-  table {
-    width: 96%;
-    margin-top: 16px;
-    /* Allow horizontal scroll as a last resort */
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Reset display block for inner elements */
-  table thead,
-  table tbody,
-  table tr {
-    display: table-row-group;
-  }
-
-  table tr {
-    display: table-row;
-    height: auto;
-    min-height: 40px;
-  }
-
-  table th,
-  table td {
-    display: table-cell;
+  td {
     padding: 8px 6px;
-    font-size: clamp(11px, 3vw, 14px);
+    font-size: 10px;
   }
 
-  /* Reduce word-spacing so text doesn't overflow on small screens */
-  td {
-    word-spacing: normal;
-    letter-spacing: 0.5px;
-  }
-
+  #nrOfdays,
+  #date,
   tr .min_temp,
   tr .max_temp {
-    word-spacing: normal;
+    word-spacing: 4px;
+    font-size: 10px;
   }
 
   tr .icon {
-    word-spacing: 20px;
-    font-size: clamp(16px, 5vw, 22px);
+    word-spacing: 8px;
+    font-size: 16px;
   }
 
-  #date {
-    word-spacing: 8px;
-    font-size: clamp(10px, 2.5vw, 13px);
-  }
-
-  #nrOfdays {
-    word-spacing: 8px;
+  .forecast-wrapper {
+    padding: 16px 12px;
+    border-radius: 18px;
   }
 }
 
 /* ============================================================
-   TABLET  (768px – 1023px)
+   TABLET  (481px – 767px)
    ============================================================ */
-@media (min-width: 768px) and (max-width: 1023px) {
-  body {
-    padding: 16px;
-  }
-
+@media (min-width: 481px) and (max-width: 767px) {
   .box {
-    width: min(360px, 60vw);
-    height: auto;
-    min-height: 430px;
-    margin-top: 40px;
-  }
-
-  h1 {
-    font-size: clamp(28px, 4vw, 35px);
-  }
-
-  table {
-    width: 85%;
-    margin-top: 6%;
+    width: min(360px, 90vw);
   }
 
   td {
-    word-spacing: 20px;
-    font-size: 14px;
-    padding: 8px;
+    font-size: 12px;
   }
 
-  tr .min_temp,
-  tr .max_temp {
-    word-spacing: 30px;
-  }
-
-  tr .icon {
-    word-spacing: 40px;
-  }
-
-  #date {
-    word-spacing: 16px;
-  }
-
-  a {
-    font-size: clamp(24px, 4vw, 36px);
-  }
+  #nrOfdays { word-spacing: 8px; }
+  #date     { word-spacing: 6px; }
+  tr .min_temp, tr .max_temp { word-spacing: 10px; }
+  tr .icon  { word-spacing: 16px; }
 }
 
 /* ============================================================
-   DESKTOP  (1024px – 1439px)
+   DESKTOP  (1024px+)
    ============================================================ */
 @media (min-width: 1024px) {
-  body {
-    padding: 20px;
-  }
-
   .box {
-    width: 300px;
-    height: 450px;
-    margin-top: 50px;
+    width: 340px;
   }
 
-  table {
-    width: 80%;
-    margin-top: 10%;
-  }
-
-  a {
-    font-size: 40px;
+  .forecast-wrapper {
+    width: min(760px, 90vw);
   }
 }
 
 /* ============================================================
-   LARGE SCREENS  (1440px+)
+   LARGE  (1440px+)
    ============================================================ */
 @media (min-width: 1440px) {
   .box {
-    width: 340px;
-    height: 480px;
-    margin-top: 60px;
+    width: 360px;
   }
 
-  table {
-    width: 70%;
+  h2.iconimage {
+    font-size: 80px;
   }
 
-  h1 {
-    font-size: 38px;
+  h3.temp {
+    font-size: 60px;
   }
 
-  h3 {
-    font-size: 34px;
-  }
-
-  td {
-    font-size: 16px;
-    padding: 12px;
+  .forecast-wrapper {
+    width: min(840px, 80vw);
   }
 }
