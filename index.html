@@ -3,38 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Stockholm Weather</title>
     <link rel="stylesheet" href="styleSheet.css">
 </head>
 <body>
-<a href="index2.html">Weather in next 5 Days</a>
-<div class = "box">
-   
+<a href="index2.html">Weather in next 5 Days &rarr;</a>
+<div class="box">
     <div class="weather">
-        <h1 class="cityName"> Stockholm</h1>
-        <h2 class="iconimage"></h2> 
-        <h3 class="temp">15</h3>
-        <h4 class="time">time</h4>
+        <h1 class="cityName">Stockholm</h1>
+        <h2 class="iconimage"></h2>
+        <h3 class="temp">—</h3>
+        <h4 class="time">loading…</h4>
     </div>
     <table>
         <tr>
-            <th>Wind Speed <img src="wind-speed.png" width="30%" height="30%"></th>              
-            <td class="windkm"></td>            
+            <th><span class="th-label">Wind Speed</span> <img src="wind-speed.png" width="30%" height="30%"></th>
+            <td class="windkm"></td>
         </tr>
-        
         <tr>
-            <th>Latitude</th>
+            <th><span class="th-label">Latitude</span></th>
             <td class="latitude"></td>
         </tr>
         <tr>
-            <th>Longitude</th>
+            <th><span class="th-label">Longitude</span></th>
             <td class="longitude"></td>
         </tr>
-        
     </table>
 </div>
-<script src="WeatherApp.js"> 
-</script>
-    
+<script src="WeatherApp.js"></script>
 </body>
 </html>
