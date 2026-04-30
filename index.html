@@ -4,7 +4,324 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stockholm Weather</title>
-  <link rel="stylesheet" href="styleSheet.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOKENS ─────────────────────────────────────── */
+    :root {
+      --bg-grad:      linear-gradient(160deg,#1a0800 0%,#5c1a00 35%,#b84400 65%,#e8720a 100%);
+      --accent:       #e8720a;
+      --accent-gold:  #f5c842;
+      --accent-warm:  #ff9a60;
+      --card-bg:      rgba(40,12,0,0.58);
+      --card-border:  rgba(232,114,10,0.32);
+      --td-bg:        rgba(232,114,10,0.14);
+      --td-hover:     rgba(232,114,10,0.28);
+      --text-primary: #fff8e0;
+      --text-dim:     rgba(255,230,180,0.62);
+      --text-gold:    #f5c842;
+      --font-serif:   'Playfair Display', Georgia, serif;
+      --font-mono:    'IBM Plex Mono', 'Courier New', monospace;
+      --r-card:       26px;
+      --r-cell:       10px;
+      --shadow:       0 28px 72px rgba(0,0,0,0.65), 0 0 0 1px rgba(232,114,10,0.18);
+    }
+
+    /* ── BODY ────────────────────────────────────────── */
+    body {
+      min-height: 100vh;
+      background: var(--bg-grad);
+      background-attachment: fixed;
+      background-color: #1a0800;
+      font-family: var(--font-serif);
+      color: var(--text-primary);
+      padding: 36px 16px 64px;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Vignette overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(232,114,10,0.18) 0%, transparent 60%),
+        linear-gradient(180deg,
+          rgba(20,4,0,0.30) 0%,
+          rgba(20,4,0,0.10) 40%,
+          rgba(20,4,0,0.50) 85%,
+          rgba(10,2,0,0.78) 100%
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Horizon glow line */
+    body::after {
+      content: '';
+      position: fixed;
+      left: 0; right: 0;
+      top: 62%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232,114,10,0.35), rgba(245,200,66,0.5), rgba(232,114,10,0.35), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body > * { position: relative; z-index: 1; }
+
+    /* ── NAV LINK ──────────────────────────────────── */
+    a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: clamp(10px, 1.8vw, 12px);
+      font-weight: 400;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-gold);
+      text-decoration: none;
+      padding: 9px 22px;
+      border: 1px solid rgba(245,200,66,0.28);
+      border-radius: 50px;
+      background: rgba(40,12,0,0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.22s ease;
+      margin-bottom: 36px;
+      align-self: center;
+    }
+    a::before { content: '←'; }
+    a:hover {
+      background: rgba(232,114,10,0.22);
+      border-color: var(--accent-gold);
+      color: #fff;
+      box-shadow: 0 0 20px rgba(245,200,66,0.18);
+      transform: translateY(-2px);
+    }
+
+    /* ── .box CARD ─────────────────────────────────── */
+    .box {
+      position: relative;
+      z-index: 1;
+      width: min(360px, 94vw);
+      background: var(--card-bg);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow);
+      padding: clamp(28px, 6vw, 40px) clamp(22px, 5vw, 34px);
+      margin: 0 auto;
+      overflow: hidden;
+      background-image: none;
+      align-self: center;
+    }
+
+    /* Gold filigree top bar */
+    .box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(245,200,66,0.4) 20%,
+        #f5c842 50%,
+        rgba(245,200,66,0.4) 80%,
+        transparent 100%
+      );
+      border-radius: var(--r-card) var(--r-card) 0 0;
+    }
+
+    /* Warm inner glow */
+    .box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--r-card);
+      background: radial-gradient(ellipse at 50% -10%, rgba(232,114,10,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── WEATHER SECTION ───────────────────────────── */
+    .weather {
+      text-align: center;
+      padding-bottom: 26px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(232,114,10,0.22);
+    }
+
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(22px, 5.5vw, 32px);
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      font-style: italic;
+      margin: 0;
+    }
+
+    /* ornamental rule under city */
+    h1::after {
+      content: '— ✦ —';
+      display: block;
+      font-size: 11px;
+      font-style: normal;
+      letter-spacing: 0.22em;
+      color: var(--accent-gold);
+      margin-top: 8px;
+      opacity: 0.8;
+    }
+
+    h2 {
+      font-size: clamp(54px, 14vw, 82px);
+      line-height: 1;
+      margin: 14px 0 6px;
+      filter: drop-shadow(0 0 20px rgba(232,114,10,0.55));
+      display: block;
+      text-align: center;
+    }
+
+    h3 {
+      font-family: var(--font-mono);
+      font-size: clamp(42px, 11vw, 66px);
+      font-weight: 300;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+      text-shadow: 0 0 28px rgba(245,200,66,0.45), 0 2px 10px rgba(0,0,0,0.5);
+      margin: 4px auto 14px;
+      display: block;
+      text-align: center;
+    }
+
+    h4 {
+      font-family: var(--font-mono);
+      font-size: clamp(11px, 2.4vw, 13px);
+      font-weight: 300;
+      color: var(--text-dim);
+      letter-spacing: 0.10em;
+      line-height: 1.8;
+      display: block;
+      text-align: center;
+    }
+
+    /* ── TABLE ─────────────────────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 7px;
+      margin-top: 4px;
+      table-layout: fixed;
+      background-image: none;
+    }
+
+    tr { height: auto; }
+
+    th {
+      font-family: var(--font-mono);
+      font-size: clamp(9px, 1.8vw, 11px);
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-align: left;
+      padding: 12px 12px;
+      white-space: nowrap;
+      width: 44%;
+      vertical-align: middle;
+    }
+
+    td {
+      background: var(--td-bg);
+      border: 1px solid rgba(232,114,10,0.20);
+      border-radius: var(--r-cell);
+      text-align: center;
+      padding: 12px 10px;
+      font-family: var(--font-mono);
+      font-size: clamp(11px, 2.2vw, 13px);
+      font-weight: 400;
+      color: var(--text-gold);
+      word-spacing: normal;
+      letter-spacing: 0.06em;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background 0.2s, box-shadow 0.2s;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      background-image: none;
+    }
+
+    td:hover {
+      background: var(--td-hover);
+      box-shadow: 0 0 0 1px rgba(245,200,66,0.30);
+    }
+
+    .box table { background-image: none; }
+    .box table th { text-align: left; }
+    .box table td { background-image: none; }
+    .box table img {
+      width: auto; height: 16px; max-width: 20px;
+      vertical-align: middle; opacity: 0.75;
+      filter: brightness(0) saturate(100%) invert(85%) sepia(40%) saturate(400%) hue-rotate(5deg);
+    }
+
+    /* ── ANIMATIONS ────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes goldPulse {
+      0%,100% { text-shadow: 0 0 28px rgba(245,200,66,0.45), 0 2px 10px rgba(0,0,0,0.5); }
+      50%      { text-shadow: 0 0 48px rgba(245,200,66,0.70), 0 2px 10px rgba(0,0,0,0.5); }
+    }
+
+    a    { animation: fadeUp 0.5s ease both 0.05s; }
+    .box { animation: fadeUp 0.65s ease both 0.15s; }
+    tr:nth-child(1) { animation: fadeUp 0.5s ease both 0.22s; }
+    tr:nth-child(2) { animation: fadeUp 0.5s ease both 0.30s; }
+    tr:nth-child(3) { animation: fadeUp 0.5s ease both 0.38s; }
+    h3 { animation: goldPulse 4s ease-in-out infinite; }
+
+    /* ── SCROLLBAR ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(232,114,10,0.4); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+    /* ── RESPONSIVE ────────────────────────────────── */
+    @media (max-width: 480px) {
+      body { padding: 18px 10px 48px; }
+      a { font-size: 10px; padding: 8px 16px; margin-bottom: 20px; }
+      .box { padding: 22px 16px 20px; border-radius: 20px; }
+      .weather { padding-bottom: 18px; margin-bottom: 16px; }
+      th { width: 40%; padding: 9px 8px; font-size: 9px; }
+      td { padding: 9px 6px; font-size: 10px; }
+    }
+    @media (min-width: 481px) and (max-width: 767px) {
+      .box { width: min(380px, 92vw); }
+    }
+    @media (min-width: 1024px) {
+      body { padding: 44px 40px 80px; }
+      .box { width: 370px; }
+    }
+    @media (min-width: 1440px) {
+      .box { width: 400px; padding: 44px 38px; }
+      h2 { font-size: 90px; }
+      h3 { font-size: 72px; }
+      th { font-size: 12px; padding: 14px 16px; }
+      td { font-size: 14px; padding: 14px 12px; }
+    }
+  </style>
 </head>
 <body>
 
@@ -14,7 +331,7 @@
     <div class="weather">
       <h1 class="cityName">Stockholm</h1>
       <h2 class="iconimage"></h2>
-      <h3 class="temp">--°C</h3>
+      <h3 class="temp">--</h3>
       <h4 class="time">--:--:--</h4>
     </div>
 
@@ -34,6 +351,75 @@
     </table>
   </div>
 
-  <script src="WeatherApp.js"></script>
+  <script>
+    const weather = {
+      0:"Clear sky ☀️",1:"Mainly clear 🌤️",2:"Partly cloudy ⛅",3:"Overcast ☁️",
+      45:"Foggy 🌫️",48:"Depositing rime fog 🌫️",51:"Light drizzle 🌧️",
+      61:"Light rain 🌦️",63:"Moderate rain 🌧️",71:"Light snow ❄️",95:"Thunderstorm ⛈️"
+    };
+    const weather5 = {
+      0:"☀️",1:"🌤️",2:"⛅",3:"☁️",45:"🌫️",48:"🌫️",51:"🌧️",53:"🌧️",
+      55:"🌧️",56:"🌧️",57:"🌧️",61:"🌦️",63:"🌧️",65:"🌧️",66:"🌧️",
+      67:"🌧️",71:"❄️",73:"❄️",75:"❄️",95:"⛈️"
+    };
+    function extractEmoji(str) {
+      if (!str) return '';
+      const parts = str.trim().split(' ');
+      return parts[parts.length - 1];
+    }
+    function checkWeather() {
+      fetch("https://api.open-meteo.com/v1/forecast?latitude=59.3293&longitude=18.0686&current_weather=true&timezone=Europe/Stockholm")
+        .then(r => r.json())
+        .then(data => {
+          document.querySelector(".temp").innerHTML = Math.round(data.current_weather.temperature) + "°C";
+          let code = data.current_weather.weathercode;
+          for (let i = 0; i < 100; i++) {
+            if (weather[code] == weather[i]) {
+              document.querySelector(".iconimage").innerHTML = extractEmoji(weather[i]);
+            }
+          }
+          let T = new Date();
+          document.querySelector(".time").innerHTML = T.toTimeString().split(" ")[0] + "<br>" + T.toISOString().split("T")[0];
+          document.querySelector(".windkm").innerHTML = data.current_weather.windspeed + " km/h";
+          document.querySelector(".latitude").innerHTML = (data.latitude).toFixed(2);
+          document.querySelector(".longitude").innerHTML = (data.longitude).toFixed(2);
+        });
+    }
+    checkWeather();
+
+    function checkWeather5() {
+      fetch("https://api.open-meteo.com/v1/forecast?latitude=59.3293&longitude=18.0686&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=Europe/Stockholm&forecast_days=5")
+        .then(r => r.json())
+        .then(data => {
+          let icons = "";
+          for (let j = 0; j < 5; j++) icons += weather5[data.daily.weathercode[j]] + " ";
+          document.querySelector(".icon") && (document.querySelector(".icon").innerHTML = icons);
+          let mn = "", mx = "";
+          for (let i = 0; i < 5; i++) {
+            mn += Math.round(data.daily.temperature_2m_min[i]) + "°C ";
+            mx += Math.round(data.daily.temperature_2m_max[i]) + "°C ";
+          }
+          document.querySelector(".min_temp") && (document.querySelector(".min_temp").innerHTML = mn);
+          document.querySelector(".max_temp") && (document.querySelector(".max_temp").innerHTML = mx);
+        });
+    }
+    checkWeather5();
+
+    const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+    const today = new Date();
+    const day1 = today.getDay();
+    const dateT = today.getDate(), month = today.getMonth(), year = today.getFullYear();
+    let day = "", date5 = "", j = 0;
+    for (let i = day1; i < days.length; i++) {
+      if (j == 5) break;
+      day += days[i] + "  "; date5 += (month+1) + "/" + (dateT+j) + "  "; j++;
+    }
+    for (let i = 0; i < day1; i++) {
+      if (j == 5) break;
+      day += days[i] + "  "; date5 += (month+1) + "/" + (dateT+j) + "  "; j++;
+    }
+    document.getElementById("nrOfdays") && (document.getElementById("nrOfdays").innerHTML = day);
+    document.getElementById("date") && (document.getElementById("date").innerHTML = date5);
+  </script>
 </body>
 </html>
